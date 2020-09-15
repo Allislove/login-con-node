@@ -81,24 +81,27 @@ app.get('/restablecer-contrasena', (request, response) => {
 
 /* LOGIN METHOD FOR USERS REGISTRATION*/
 app.post('/login', (req, res) => {
-  console.log(req.body.email)
+  console.log(req.body.email);
   console.log(req.body.password);
 
-  let email = req.body.email;
-  let password = req.body.password;
+  /*let email = req.body.email;
+  let password = req.body.password; */
+  const { email, password} = req.body;
 
   fs.readFile('db.json', (error, data) => {
       let users = JSON.parse(data.toString()); // obtengo todos los usuarios que esten en el archivoo que estoy leyendo
-    //const { name, email, password, password2 } = req.body;
         let userObj = users.find(user => {
-            return user.email = email;
+            return user.email === email;
         });
-        if(userObj.password === password){
+        if(userObj && userObj.password === password){
           console.log('la contraseña es correcta');
-          res.redirect('indexx.html' )
+          res.sendFile('/assets/indexx.html', { root: __dirname })
+          //res.redirect('indexx.html' )
       }else {
           console.log('no coincide');
-          res.redirect('login.html' )
+          res.sendFile('/assets/login.html', { root: __dirname })
+
+          //res.redirect('login.html' )
             //res.sendFile('./assets/login.html', { root: __dirname })
       }
       console.log(users)
